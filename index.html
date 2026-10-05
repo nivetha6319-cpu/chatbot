@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoseAI • Intelligent Pink & White AI Chatbot</title>
+  <meta name="description" content="A powerful, elegant pink & white themed AI Chatbot powered by intelligent models like ChatGPT & Claude. Ask any question in English, Tamil, and more.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Highlight.js for Syntax Highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  
+  <!-- Marked.js for Markdown Rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Puter.js for Free Browser AI inference -->
+  <script src="https://js.puter.com/v2/"></script>
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout" id="appLayout">
+    
+    <!-- Left Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12A10 10 0 0 1 12 2Z"></path>
+              <path d="m9 12 2 2 4-4"></path>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h2>Rose<span>AI</span></h2>
+            <span class="badge">PRO</span>
+          </div>
+        </div>
+        <button class="icon-btn close-sidebar-btn" id="closeSidebarBtn" title="Close Sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="new-chat-wrapper">
+        <button class="new-chat-btn" id="newChatBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>New Chat</span>
+        </button>
+      </div>
+
+      <!-- Chat History List -->
+      <div class="chat-history-container">
+        <div class="history-label">Recent Conversations</div>
+        <div class="chat-history-list" id="chatHistoryList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="footer-btn" id="clearAllChatsBtn" title="Clear All History">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18m-2 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Clear History</span>
+        </button>
+        <button class="footer-btn" id="openSettingsBtn" title="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          <span>Settings</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main class="chat-workspace">
+      
+      <!-- Top Navigation Bar -->
+      <header class="top-nav">
+        <div class="nav-left">
+          <button class="icon-btn toggle-sidebar-btn" id="toggleSidebarBtn" title="Toggle Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          
+          <div class="model-picker-wrapper">
+            <div class="model-selector-pill" id="modelSelectorPill" tabindex="0">
+              <span class="model-dot"></span>
+              <span class="model-name" id="currentModelDisplay">Claude 3.5 Sonnet</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            
+            <!-- Model Dropdown Menu -->
+            <div class="model-dropdown-menu" id="modelDropdownMenu">
+              <div class="dropdown-item active" data-model="claude-3-5-sonnet">
+                <div class="model-meta">
+                  <div class="model-title">Claude 3.5 Sonnet <span class="tag">Smartest</span></div>
+                  <div class="model-desc">Best for nuanced reasoning, Tamil & English, creative writing</div>
+                </div>
+              </div>
+              <div class="dropdown-item" data-model="gpt-4o">
+                <div class="model-meta">
+                  <div class="model-title">GPT-4o <span class="tag">Fast</span></div>
+                  <div class="model-desc">Flagship OpenAI intelligence, high speed coding & logic</div>
+                </div>
+              </div>
+              <div class="dropdown-item" data-model="deepseek-chat">
+                <div class="model-meta">
+                  <div class="model-title">DeepSeek V3 <span class="tag">Code</span></div>
+                  <div class="model-desc">Exceptional programming, mathematics and step-by-step logic</div>
+                </div>
+              </div>
+              <div class="dropdown-item" data-model="gemini">
+                <div class="model-meta">
+                  <div class="model-title">Gemini 1.5 Pro <span class="tag">Knowledge</span></div>
+                  <div class="model-desc">Massive general knowledge, facts, translation & summaries</div>
+                </div>
+              </div>
+              <div class="dropdown-item" data-model="ollama-llama3">
+                <div class="model-meta">
+                  <div class="model-title">Llama 3.2 <span class="tag" style="background: linear-gradient(135deg,#7c3aed,#a855f7); color:#fff;">Local</span></div>
+                  <div class="model-desc">100% offline · Runs on your PC via Ollama · Private & free</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-right">
+          <button class="nav-action-btn" id="exportChatBtn" title="Export Conversation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Export</span>
+          </button>
+          
+          <button class="nav-action-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Theme Hue">
+            <span class="theme-icon">🌸</span>
+            <span class="theme-label">Pink & White</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Messages Scroll Area -->
+      <div class="messages-container" id="messagesContainer">
+        
+        <!-- Welcome Hero View (when no messages) -->
+        <div class="welcome-hero" id="welcomeHero">
+          <div class="hero-avatar">
+            <div class="avatar-glow"></div>
+            <div class="avatar-circle">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 2a8 8 0 0 0-8 8c0 4.418 3.582 8 8 8s8-3.582 8-8a8 8 0 0 0-8-8z"></path>
+                <path d="M9 10h.01"></path>
+                <path d="M15 10h.01"></path>
+                <path d="M9.5 15a3.5 3.5 0 0 0 5 0"></path>
+                <path d="M12 2v2"></path>
+                <path d="M12 18v4"></path>
+                <path d="M4.93 4.93l1.41 1.41"></path>
+                <path d="M17.66 17.66l1.41 1.41"></path>
+              </svg>
+            </div>
+          </div>
+
+          <h1 class="hero-title">How can I help you today?</h1>
+          <p class="hero-subtitle">
+            Ask me any question in English or Tamil. I can write code, explain concepts, craft stories, solve math, and assist with any task.
+          </p>
+
+          <!-- Prompt Suggestions Grid -->
+          <div class="suggestions-grid">
+            <div class="suggestion-card" data-prompt="Explain Quantum Computing in simple terms with an everyday real-world analogy.">
+              <div class="card-icon">⚛️</div>
+              <div class="card-text">
+                <div class="card-headline">Explain Quantum Computing</div>
+                <div class="card-subline">Simple terms with a real-world analogy</div>
+              </div>
+            </div>
+
+            <div class="suggestion-card" data-prompt="Write a complete Python script to fetch live weather data from a free public API and display it nicely.">
+              <div class="card-icon">💻</div>
+              <div class="card-text">
+                <div class="card-headline">Python API Script</div>
+                <div class="card-subline">Fetch live weather data & format output</div>
+              </div>
+            </div>
+
+            <div class="suggestion-card" data-prompt="வாழ்க்கையில் வெற்றி பெற 5 மிக முக்கியமான வழிகளை அழகிய தமிழில் விவரித்து கூறுங்கள்.">
+              <div class="card-icon">🌸</div>
+              <div class="card-text">
+                <div class="card-headline">வெற்றிக்கான வழிகள் (தமிழ்)</div>
+                <div class="card-subline">5 important life success tips in Tamil</div>
+              </div>
+            </div>
+
+            <div class="suggestion-card" data-prompt="Give me 3 creative business ideas combining Artificial Intelligence with Health and Wellness.">
+              <div class="card-icon">💡</div>
+              <div class="card-text">
+                <div class="card-headline">Creative AI Startup Ideas</div>
+                <div class="card-subline">Combining AI with Health & Wellness</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Stream Stream Area -->
+        <div class="messages-list" id="messagesList">
+          <!-- Dynamic message bubbles will appear here -->
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator-row hidden" id="typingIndicator">
+          <div class="bot-msg-avatar">
+            <div class="bot-avatar-inner">🌸</div>
+          </div>
+          <div class="typing-bubble">
+            <div class="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span class="typing-label">RoseAI is thinking...</span>
+          </div>
+        </div>
+
+        <div id="messagesAnchor"></div>
+      </div>
+
+      <!-- Stop Generating Floating Button -->
+      <div class="stop-generating-wrapper hidden" id="stopGeneratingWrapper">
+        <button class="stop-generating-btn" id="stopGeneratingBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+          </svg>
+          <span>Stop generating</span>
+        </button>
+      </div>
+
+      <!-- Input Bar Footer Area -->
+      <footer class="input-section">
+        <div class="input-card">
+          
+          <div class="input-top-actions">
+            <!-- Voice Input Mic Button -->
+            <button class="tool-btn mic-btn" id="micBtn" title="Speak to type (Tamil/English)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+              <span class="mic-ripple"></span>
+            </button>
+
+            <!-- Textarea -->
+            <textarea 
+              id="chatInput" 
+              placeholder="Ask anything... (எந்த கேள்வியும் கேட்கலாம்)" 
+              rows="1" 
+              autocomplete="off"
+            ></textarea>
+
+            <!-- Send Button -->
+            <button class="send-btn" id="sendBtn" title="Send message" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+
+          <div class="input-hints">
+            <div class="hint-text">
+              <span>🌸 Powered by AI • Answers like ChatGPT & Claude</span>
+            </div>
+            <div class="shortcut-text">Press <strong>Enter ↵</strong> to send, <strong>Shift + Enter</strong> for new line</div>
+          </div>
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay hidden" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <div class="modal-icon">⚙️</div>
+          <h3>Settings & Customization</h3>
+        </div>
+        <button class="icon-btn close-modal-btn" id="closeSettingsBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- System Persona -->
+        <div class="setting-item">
+          <label class="setting-label" for="systemPromptInput">AI Personality & Role</label>
+          <p class="setting-desc">Instruct the AI how you want it to behave and respond.</p>
+          <textarea id="systemPromptInput" class="setting-textarea" rows="3">You are RoseAI, an ultra-intelligent, friendly, and helpful AI assistant like ChatGPT and Claude. You provide clear, well-structured, accurate, and insightful responses with markdown formatting. You excel in English, Tamil, coding, science, creative writing, and any domain.</textarea>
+        </div>
+
+        <!-- Custom API Key (Optional) -->
+        <div class="setting-item">
+          <label class="setting-label" for="customApiKeyInput">Custom API Key (Optional)</label>
+          <p class="setting-desc">Cloud AI is powered by Puter. Sign in when prompted the first time; no API key is required.</p>
+          <div class="api-key-row">
+            <select id="apiProviderSelect" class="setting-select">
+              <option value="auto">Auto Free Cloud AI (Zero Setup)</option>
+              <option value="gemini">Google Gemini API</option>
+              <option value="openai">OpenAI API</option>
+            </select>
+            <input type="password" id="customApiKeyInput" class="setting-input" placeholder="Enter API Key (Optional)">
+          </div>
+        </div>
+
+        <!-- Sound Effects -->
+        <div class="setting-item toggle-item">
+          <div>
+            <div class="setting-label">Sound Effects</div>
+            <div class="setting-desc">Play a subtle gentle chime when response completes</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="soundEffectsToggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <!-- Theme Accent Tone -->
+        <div class="setting-item">
+          <label class="setting-label">Theme Accent Style</label>
+          <div class="palette-options">
+            <button class="palette-chip active" data-palette="pink-sakura" title="Sakura Blossom">
+              <span class="chip-color sakura"></span> Sakura Pink
+            </button>
+            <button class="palette-chip" data-palette="pink-rose" title="Rose Gold">
+              <span class="chip-color rose"></span> Rose Magenta
+            </button>
+            <button class="palette-chip" data-palette="pink-candy" title="Cotton Candy">
+              <span class="chip-color candy"></span> Cotton Candy
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-btn secondary" id="resetSettingsBtn">Reset Defaults</button>
+        <button class="modal-btn primary" id="saveSettingsBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification hidden" id="toastNotification">
+    <span class="toast-message" id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Main Javascript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
